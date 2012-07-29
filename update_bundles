@@ -31,13 +31,12 @@ git_bundles = [
   "git://github.com/tsaleh/vim-tmux.git",
   "git://github.com/vim-ruby/vim-ruby.git",
   "git://github.com/vim-scripts/FuzzyFinder.git",
-  "git://github.com/vim-scripts/Gist.vim.git",
+  "git://github.com/vim-scripts/L9.git",
   "git://github.com/vim-scripts/mru.vim.git",
 ]
 
 vim_org_scripts = [
   ["IndexedSearch", "7062",  "plugin"],
-  ["vim-l9",        "3252",  "plugin"],
   ["jquery",        "12107", "syntax"],
 ]
 
@@ -46,14 +45,17 @@ bundles_dir = File.join(File.dirname(__FILE__), "bundle")
 
 FileUtils.cd(bundles_dir)
 
-puts "trashing everything (lookout!)"
-Dir["*"].each {|d| FileUtils.rm_rf d }
-
 git_bundles.each do |url|
   dir = url.split('/').last.sub(/\.git$/, '')
-  puts "unpacking #{url} into #{dir}"
-  `git clone #{url} #{dir}`
-  FileUtils.rm_rf(File.join(dir, ".git"))
+  if File.directory?(dir)
+    FileUtils.cd(dir)
+    puts "updating #{dir}"
+    `git pull`
+    FileUtils.cd('../')
+  else
+    puts "unpacking #{url} into #{dir}"
+    `git clone #{url} #{dir}`
+  end
 end
 
 vim_org_scripts.each do |name, script_id, script_type|
