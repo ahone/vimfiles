@@ -7,6 +7,7 @@ vimfiles for Rails
 Create a symlink for vimrc and vim.
 <br/>
 <code>~$ ln -s vimfiles/vimrc .vimrc</code>
+<br/>
 <code>~$ ln -s vimfiles .vim</code>
 <p/>
 Create backup folder
