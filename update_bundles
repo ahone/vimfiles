@@ -2,6 +2,7 @@
 
 require 'fileutils'
 require 'open-uri'
+require "git"
 
 git_bundles = [
   "git://github.com/astashov/vim-ruby-debugger.git",
@@ -40,24 +41,37 @@ vim_org_scripts = [
   ["jquery",        "12107", "syntax"],
 ]
 
+# git clone
+def clone_git(url,dir)
+    FileUtils.rm_rf(dir) if File.directory?(dir)
+    puts "unpacking #{url} into #{dir}"
+    Git.clone(url,dir)
+end
 
+# go to bundle dir 
 bundles_dir = File.join(File.dirname(__FILE__), "bundle")
-
 FileUtils.cd(bundles_dir)
 
+
+# load with git
 git_bundles.each do |url|
   dir = url.split('/').last.sub(/\.git$/, '')
-  if File.directory?(dir)
-    FileUtils.cd(dir)
-    puts "updating #{dir}"
-    `git pull`
-    FileUtils.cd('../')
-  else
-    puts "unpacking #{url} into #{dir}"
-    `git clone #{url} #{dir}`
+  begin
+    if Git.open(dir)
+      g = Git.open(dir)
+      puts "updating #{dir}"
+        g.with_working(dir) do
+        g.pull
+      end
+    else
+      clone_git(url,dir)
+    end
+  rescue
+    clone_git(url,dir)
   end
 end
 
+# load from vim.org
 vim_org_scripts.each do |name, script_id, script_type|
   puts "downloading #{name}"
   local_file = File.join(name, script_type, "#{name}.vim")
@@ -66,3 +80,4 @@ vim_org_scripts.each do |name, script_id, script_type|
     file << open("http://www.vim.org/scripts/download_script.php?src_id=#{script_id}").read
   end
 end
+

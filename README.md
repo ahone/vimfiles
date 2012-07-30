@@ -4,6 +4,8 @@ vimfiles
 
 vimfiles for Rails
 
+Run "vimfiles/update_bundles" first
+<p/>
 Create a symlink for vimrc and vim.
 <br/>
 <code>~$ ln -s vimfiles/vimrc .vimrc</code>
