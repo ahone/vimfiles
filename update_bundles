@@ -50,6 +50,7 @@ end
 
 # go to bundle dir 
 bundles_dir = File.join(File.dirname(__FILE__), "bundle")
+FileUtils.mkdir (bundles_dir) unless File.directory?(bundles_dir)
 FileUtils.cd(bundles_dir)
 
 
