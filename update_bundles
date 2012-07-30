@@ -1,8 +1,12 @@
 #!/usr/bin/env ruby
-
-require 'fileutils'
-require 'open-uri'
-require "git"
+begin
+  require 'fileutils'
+  require 'open-uri'
+  require "git"
+rescue LoadError => e
+  puts "#{e} gem require"
+  exit
+end
 
 git_bundles = [
   "git://github.com/astashov/vim-ruby-debugger.git",
