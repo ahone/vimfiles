@@ -115,7 +115,7 @@ begin
   
   # create backup 
   # first time .vim[rc] -> vim[rc]_backup
-  # for the second time exist .vim[rc]_backup -> vim[rc]_backup(DateTime)
+  # for the second time .vim[rc]_backup -> vim[rc]_backup(DateTime)
   def create_backup(fod)
     puts "backup " + fod + " to " + fod + "_backup"
     FileUtils.mv(fod + '_backup',fod + '_backup_' + Time.now.strftime("%Y%m%d%H%M%S")) if File.exist?(fod + '_backup')
