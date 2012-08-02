@@ -9,6 +9,16 @@ ahone/vimfiles
 * create a backup from existing .vimrc file and .vim folder
 
 
+### Installation
+
+``~ $ vimfiles/install.rb``
+
+
+### Update
+
+``~ $ vimfiles/update.rb``
+
+
 ### Plugins
 
  * <a href=https://github.com/tpope/vim-abolish.giti>Abolish</a>
@@ -42,13 +52,3 @@ ahone/vimfiles
  * <a href=https://github.com/tomtom/tcomment_vim.git>Tcomment</a>
  * <a href=https://github.com/timcharper/textile.vim.git>Textile</a>
  * <a href=https://github.com/tsaleh/vim-tmux.git>Tmux</a>
-
-
-### Installation
-
-``~ $ vimfiles/install.rb``
-
-
-### Update
-
-``~ $ vimfiles/update.rb``
