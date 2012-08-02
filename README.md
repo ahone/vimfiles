@@ -12,7 +12,7 @@ ahone/vimfiles
 ### Plugins
 
  * <a href=https://github.com/tpope/vim-abolish.giti>Abolish</a>
- * <a href=https://github.com/Townk/vim-autoclose.git>>Autoclose</a>
+ * <a href=https://github.com/Townk/vim-autoclose.git>Autoclose</a>
  * <a href=https://github.com/tpope/vim-bundler.git>Bundler</a>
  * <a href=https://github.com/tpope/vim-commentary.git>Commentary</a>
  * <a href=https://github.com/tpope/vim-cucumber.git>Cucumber</a>
@@ -46,9 +46,9 @@ ahone/vimfiles
 
 ### Installation
 
-  ~ $ vimfiles/install.rb
+``~ $ vimfiles/install.rb``
 
 
 ### Update
 
-  ~ $ vimfiles/update.rb
+``~ $ vimfiles/update.rb``
