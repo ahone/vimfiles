@@ -46,18 +46,27 @@ begin
     "git://github.com/vim-scripts/mru.vim.git",
   ]
 
+  # www.vim.org
+  # name, ID (src_id), script type
   vim_org_scripts = [
     ["IndexedSearch", "7062",  "plugin"],
     ["jquery",        "15752", "syntax"],
   ]
-  
-  @vf = '.vimrc'
-  @vd = '.vim'
+
+  # personal vim folder
   @vfd = 'vimfiles'
-  @home_dir = Dir.home
-  
+
 
   ####################################################################
+  
+  # vimrc file
+  @vf = '.vimrc'
+
+  # default vim folder 
+  @vd = '.vim'
+  
+  # home
+  @home_dir = Dir.home
 
   if File.expand_path(File.dirname(__FILE__)) == @home_dir + "/" + @vfd
     bundles_dir = File.join(File.dirname(__FILE__), "bundle")
@@ -73,8 +82,10 @@ begin
       Git.clone(url,dir)
   end
   
+  # create bundle folder
   FileUtils.mkdir (bundles_dir) unless File.directory?(bundles_dir)
   
+  # download files
   FileUtils.cd(bundles_dir) do
     # git - http://github.com
     git_bundles.each do |url|
@@ -138,7 +149,7 @@ begin
   
   
   FileUtils.cd(@home_dir) do
-    # create symlink for .vimrc file
+    # .vimrc file
     unless validate_exist?(@vf)
       create_symlink(@vf)                    # create symlink .vimrc -> vimfiles/vimrc
     else
@@ -151,7 +162,7 @@ begin
       end
     end
    
-    # create symlink for .vim folder
+    # .vim folder
     unless validate_exist?(@vd)
       create_symlink(@vd)                   # create symlink .vim -> .vimfiles
     else
