@@ -30,6 +30,7 @@ begin
     "git://github.com/tpope/vim-cucumber.git",
     "git://github.com/tpope/vim-fugitive.git",
     "git://github.com/tpope/vim-git.git",
+    "git://github.com/mattn/gist-vim.git",
     "git://github.com/tpope/vim-haml.git",
     "git://github.com/tpope/vim-markdown.git",
     "git://github.com/tpope/vim-pathogen.git",
