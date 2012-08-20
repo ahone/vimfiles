@@ -1,5 +1,4 @@
 #!/usr/bin/env ruby
-
 # ~/vimfiles/inup.rb
 #
 # by ahone / 2012
@@ -11,68 +10,32 @@
 begin
   require 'fileutils'
   require 'open-uri'
-  require "git"
+  require 'git'
+  require 'yaml'
 
-
-  git_bundles = [
-    "git://github.com/astashov/vim-ruby-debugger.git",
-    "git://github.com/ervandew/supertab.git",
-    "git://github.com/godlygeek/tabular.git",
-    "git://github.com/msanders/snipmate.vim.git",
-    "git://github.com/pangloss/vim-javascript.git",
-    "git://github.com/scrooloose/nerdtree.git",
-    "git://github.com/timcharper/textile.vim.git",
-    "git://github.com/tomtom/tcomment_vim.git",
-    "git://github.com/Townk/vim-autoclose.git",
-    "git://github.com/tpope/vim-abolish.git",
-    "git://github.com/tpope/vim-bundler.git",
-    "git://github.com/tpope/vim-commentary.git",
-    "git://github.com/tpope/vim-cucumber.git",
-    "git://github.com/tpope/vim-fugitive.git",
-    "git://github.com/tpope/vim-git.git",
-    "git://github.com/mattn/gist-vim.git",
-    "git://github.com/tpope/vim-haml.git",
-    "git://github.com/tpope/vim-markdown.git",
-    "git://github.com/tpope/vim-pathogen.git",
-    "git://github.com/tpope/vim-rails.git",
-    "git://github.com/tpope/vim-repeat.git",
-    "git://github.com/tpope/vim-rvm.git",
-    "git://github.com/tpope/vim-surround.git",
-    "git://github.com/tsaleh/vim-matchit.git",
-    "git://github.com/tsaleh/vim-shoulda.git",
-    "git://github.com/tsaleh/vim-tmux.git",
-    "git://github.com/vim-ruby/vim-ruby.git",
-    "git://github.com/vim-scripts/FuzzyFinder.git",
-    "git://github.com/vim-scripts/L9.git",
-    "git://github.com/vim-scripts/mru.vim.git",
-  ]
-
-  # www.vim.org
-  # name, ID (src_id), script type
-  vim_org_scripts = [
-    ["IndexedSearch", "7062",  "plugin"],
-    ["jquery",        "15752", "syntax"],
-  ]
-
-  # personal vim folder
-  @vfd = 'vimfiles'
-
-
-  ####################################################################
+  # default values
+  @vim_config = '.vimrc'
+  @vim_folder = '.vim'
+  @vimfiles_folder = 'vimfiles'
+  @home_folder = Dir.home
   
-  # vimrc file
-  @vf = '.vimrc'
-
-  # default vim folder 
-  @vd = '.vim'
+  # load config file
+  if File.exists?('config.yml')
+    config = YAML.load_file("config.yml")
+    @vim_config = config['vim_config'] unless !config['vim_config']
+    @vim_folder = config['vim_folder'] unless !config['vim_folder']
+    @vimfiles_folder = config['vimfiles_folder'] unless !config['vimfiles_folder']
+    git_bundles = config['git_bundles']
+    vim_org_bundles = config['vim_org_bundles']
+  else
+    puts "No config file found. Please create first the config.yml file."
+    exit
+  end
   
-  # home
-  @home_dir = Dir.home
-
-  if File.expand_path(File.dirname(__FILE__)) == @home_dir + "/" + @vfd
+  if File.expand_path(File.dirname(__FILE__)) == "#{@home_folder}/#{@vimfiles_folder}"
     bundles_dir = File.join(File.dirname(__FILE__), "bundle")
   else
-    puts "Please move the script to -> " + @home_dir + "/" + @vfd
+    puts "Please move the script to -> #{@home_folder}/#{@vimfiles_folder}"
     exit
   end
 
@@ -83,13 +46,12 @@ begin
       Git.clone(url,dir)
   end
   
-  # create bundle folder
   FileUtils.mkdir (bundles_dir) unless File.directory?(bundles_dir)
   
-  # download files
   FileUtils.cd(bundles_dir) do
-    # git - http://github.com
-    git_bundles.each do |url|
+    # git
+    git_bundles.each_line(' ') do |u|
+      url = u.delete(" ")
       dir = url.split('/').last.sub(/\.git$/, '')
       begin
         if Git.open(dir)
@@ -107,12 +69,14 @@ begin
     end
     
     # http://www.vim.org/
-    vim_org_scripts.each do |name, script_id, script_type|
+    vim_org_bundles.each_line do |o|
+      obj = o.delete(" ") # delete blanks
+      name,download_id,type= obj.strip.split(',')
       puts "downloading #{name}"
-      local_file = File.join(name, script_type, "#{name}.vim")
+      local_file = File.join(name, type, "#{name}.vim")
       FileUtils.mkdir_p(File.dirname(local_file))
       File.open(local_file, "w") do |file|
-        file << open("http://www.vim.org/scripts/download_script.php?src_id=#{script_id}").read
+        file << open("http://www.vim.org/scripts/download_script.php?src_id=#{download_id}").read
       end
     end
   end
@@ -120,18 +84,18 @@ begin
   
   # create symlink .vim[rc] -> vim[files/vimrc]
   def create_symlink(link)
-    puts "create new " + link + " symlink"
-    FileUtils.ln_s(@vfd + '/vimrc', link, :force => true) if link == @vf
-    FileUtils.ln_s(@vfd, link, :force => true) if link == @vd
+    puts "create new #{link} symlink"
+    FileUtils.ln_s("#{@vimfiles_folder}/vimrc", link, :force => true) if link == @vim_config
+    FileUtils.ln_s(@vimfiles_folder, link, :force => true) if link == @vim_folder
   end
   
   # create backup 
   # first time .vim[rc] -> vim[rc]_backup
   # for the second time .vim[rc]_backup -> vim[rc]_backup(DateTime)
   def create_backup(fod)
-    puts "backup " + fod + " to " + fod + "_backup"
-    FileUtils.mv(fod + '_backup',fod + '_backup_' + Time.now.strftime("%Y%m%d%H%M%S")) if File.exist?(fod + '_backup')
-    FileUtils.mv(fod,fod + '_backup')
+    puts "backup #{fod} to #{fod}_backup"
+    FileUtils.mv("#{fod}_backup","#{fod}_backup_#{Time.now.strftime("%Y%m%d%H%M%S")}") if File.exist?("#{fod}_backup")
+    FileUtils.mv(fod,"#{fod}_backup")
     create_symlink(fod)
   end
   
@@ -149,29 +113,29 @@ begin
   end
   
   
-  FileUtils.cd(@home_dir) do
-    # .vimrc file
-    unless validate_exist?(@vf)
-      create_symlink(@vf)                    # create symlink .vimrc -> vimfiles/vimrc
+  FileUtils.cd(@home_folder) do
+    # create symlink for .vimrc file
+    unless validate_exist?(@vim_config)
+      create_symlink(@vim_config)                    # create symlink .vimrc -> vimfiles/vimrc
     else
-      unless validate_symlink?(@vf)          # backup existing .vimrc file and create symlink .vimrc -> vimfiles/vimrc
-        create_backup(@vf)
+      unless validate_symlink?(@vim_config)          # backup existing .vimrc file and create symlink .vimrc -> vimfiles/vimrc
+        create_backup(@vim_config)
       else
-        unless validate_readlink?(@vf, @vfd + '/vimrc')
-          create_symlink(@vf)                # overwrite existing symlink  .vimrc -> vimfiles/vimrc
+        unless validate_readlink?(@vim_config, "#{@vimfiles_folder}/vimrc")
+          create_symlink(@vim_config)                # overwrite existing symlink  .vimrc -> vimfiles/vimrc
         end
       end
     end
    
-    # .vim folder
-    unless validate_exist?(@vd)
-      create_symlink(@vd)                   # create symlink .vim -> .vimfiles
+    # create symlink for .vim folder
+    unless validate_exist?(@vim_folder)
+      create_symlink(@vim_folder)                   # create symlink .vim -> .vimfiles
     else
-      unless validate_symlink?(@vd)
-        create_backup(@vd)                  # backup existing .vim folder and create symlink .vim -> vimfiles
+      unless validate_symlink?(@vim_folder)
+        create_backup(@vim_folder)                  # backup existing .vim folder and create symlink .vim -> vimfiles
       else
-        unless validate_readlink?(@vd,@vfd)
-          create_symlink(@vd)               # overwrite existing symlink  .vim -> vimfiles
+        unless validate_readlink?(@vim_folder,@vimfiles_folder)
+          create_symlink(@vim_folder)               # overwrite existing symlink  .vim -> vimfiles
         end
       end
     end
@@ -191,4 +155,3 @@ rescue Exception => e
   puts "#{e}"
   exit
 end
-
