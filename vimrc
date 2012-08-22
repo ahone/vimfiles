@@ -39,6 +39,17 @@ set hidden
 "turn on syntax highlighting
 syntax on
 
+" ================ Key Settings ====================
+
+" Toggle line number with F2
+nnoremap <F2> :set number! number?<CR>
+
+" Toggle line number with F3
+nnoremap <F3> :set paste! paste?<CR>
+imap <F2> <C-O>:set invpaste paste?<CR>
+set pastetoggle=<F3>
+
+
 " ================ Search Settings =================
 
 set incsearch 			"Find the next match as we type the search
