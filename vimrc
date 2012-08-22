@@ -46,7 +46,7 @@ nnoremap <F2> :set number! number?<CR>
 
 " Toggle line number with F3
 nnoremap <F3> :set paste! paste?<CR>
-imap <F2> <C-O>:set invpaste paste?<CR>
+imap <F3> <C-O>:set paste! paste?<CR>
 set pastetoggle=<F3>
 
 
