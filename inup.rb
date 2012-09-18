@@ -21,8 +21,8 @@ begin
   @config = 'config.yml'
   
   # load config file
-  if File.exists?("#{@vim_folder}/#{@config}")
-    config = YAML.load_file("#{@vim_folder}/#{@config}")
+  if File.exists?("#{@home_folder}/#{@vim_folder}/#{@config}")
+    config = YAML.load_file("#{@home_folder}/#{@vim_folder}/#{@config}")
     @vim_config = config['vim_config'] unless !config['vim_config']
     @vim_folder = config['vim_folder'] unless !config['vim_folder']
     @vimfiles_folder = config['vimfiles_folder'] unless !config['vimfiles_folder']
