@@ -47,7 +47,7 @@ begin
       Git.clone(url,dir)
   end
   
-  FileUtils.mkdir (bundles_dir) unless File.directory?(bundles_dir)
+  FileUtils.mkdir(bundles_dir) unless File.directory?(bundles_dir)
   
   FileUtils.cd(bundles_dir) do
     # git
