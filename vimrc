@@ -49,11 +49,25 @@ nnoremap <F3> :set paste! paste?<CR>
 imap <F3> <C-O>:set paste! paste?<CR>
 set pastetoggle=<F3>
 
+" Press F4 to toggle highlighting on/off, and show current value.
+nnoremap <F4> :set hlsearch! hlsearch?<CR>
+
+" Tab navigation
+nnoremap <C-Left> :tabprevious<CR>
+nnoremap <C-Right> :tabnext<CR>
+nnoremap <silent> <A-Left> :execute 'silent! tabmove ' . (tabpagenr()-2)<CR>
+nnoremap <silent> <A-Right> :execute 'silent! tabmove ' . tabpagenr()<CR>
+
+" Press 2xESC to toggle highlighting off
+nnoremap <ESC><ESC> :nohlsearch<CR>
+
 
 " ================ Search Settings =================
 
 set incsearch 			"Find the next match as we type the search
-set hlsearch 			"Hilight searches by default
+set hlsearch 			"Highlight searches by default
+set showmatch                   "highlight searches
+  set matchtime=3
 set viminfo='100,f1 		"Save up to 100 marks, enable capital marks
 
 " ================ Turn Off Swap Files ==============
@@ -66,9 +80,11 @@ set nowb
 " Keep undo history across sessions, by storing in file.
 " Only works all the time.
 
+set undolevels=10000
+
 if exists("+undofile")
-  silent !mkdir ~/.vim/backups > /dev/null 2>&1
-  set undodir=~/.vim/backups
+  silent !mkdir ~/.vim/undo > /dev/null 2>&1
+  set undodir=~/.vim/undo
   set undofile
 endif
 
@@ -129,3 +145,11 @@ set nofoldenable 			"dont fold by default
  else
      colorscheme default
  endif
+
+" ================ Plugins ========================
+  " NerdTree
+  nnoremap <C-g> :NERDTreeToggle<cr>
+  let NERDTreeIgnore=[ '\.pyc$', '\.pyo$', '\.py\$class$', '\.obj$', '\.o$', '\.so$', '\.egg$', '^\.git$' ]
+  let NERDTreeHighlightCursorline=1
+  let NERDTreeShowBookmarks=1
+  let NERDTreeShowFiles=1
