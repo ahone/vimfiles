@@ -39,6 +39,21 @@ set hidden
 "turn on syntax highlighting
 syntax on
 
+" ================ Status Line ====================
+set laststatus=2
+set statusline=   " clear the statusline for when vimrc is reloaded
+set statusline+=%-3.3n\                      " buffer number
+set statusline+=%<%.40f\                     " file name
+set statusline+=%h%m%r%w                     " flags
+set statusline+=[%{strlen(&ft)?&ft:'none'},  " filetype
+set statusline+=%{strlen(&fenc)?&fenc:&enc}, " encoding
+set statusline+=%{&fileformat}]              " file format
+set statusline+=%=                           " right align
+set statusline+=%{synIDattr(synID(line('.'),col('.'),1),'name')}\  " highlight
+set statusline+=%b,0x%-8B\                   " current char
+set statusline+=%-14.(%l,%c%V%)\ %<%P        " offset
+
+
 " ================ Key Settings ====================
 
 " Toggle line number with F2
@@ -51,6 +66,9 @@ set pastetoggle=<F3>
 
 " Press F4 to toggle highlighting on/off, and show current value.
 nnoremap <F4> :set hlsearch! hlsearch?<CR>
+
+" Press F5 to toggle background
+call togglebg#map("<F5>")
 
 " Tab navigation
 nnoremap <C-Left> :tabprevious<CR>
@@ -91,11 +109,11 @@ endif
 " ================ Indentation ======================
 
 set autoindent
-set smartindent
-set smarttab
-" set shiftwidth=2
-" set softtabstop=2
-" set tabstop=2
+"set smartindent
+"set smarttab
+set shiftwidth=2
+set softtabstop=2
+set tabstop=2
 set expandtab
 
 filetype plugin on
@@ -138,14 +156,24 @@ set nofoldenable 			"dont fold by default
 
 " ================ Color ========================
 
+ let &colorcolumn="80,".join(range(81,999),",")
+ let &colorcolumn="80,".join(range(120,999),",")
+ :highlight ColorColumn ctermbg=LightGrey guibg=#424242 ctermfg=black guifg=white
+
  "set railscasts colorscheme when running vim with gui
+ let g:solarized_visibility= "normal"
+ let g:solarized_bold = 1
+ 
  if has("gui_running")
-     set term=gnome-256color
+     " set term=gnome-256color
      colorscheme railscasts
  else
-     colorscheme default
+     let g:solarized_termcolors=256
+     set background=light
+     colorscheme solarized
  endif
 
+ 
 " ================ Plugins ========================
   " NerdTree
   nnoremap <C-g> :NERDTreeToggle<cr>
