@@ -61,3 +61,6 @@
 [submodule "bundle/ruby-debugger"]
 	path = bundle/ruby-debugger
 	url = git://github.com/astashov/vim-ruby-debugger.git
+[submodule "bundle/colors-solarized"]
+	path = bundle/colors-solarized
+	url = git://github.com/altercation/vim-colors-solarized.git
