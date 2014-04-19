@@ -26,10 +26,10 @@ git_bundles:
   git://github.com/tpope/vim-repeat.git
   git://github.com/tpope/vim-rvm.git
   git://github.com/tpope/vim-surround.git
-  git://github.com/tsaleh/vim-matchit.git
   git://github.com/vim-ruby/vim-ruby.git
   git://github.com/vim-scripts/FuzzyFinder.git
   git://github.com/vim-scripts/L9.git
+  # git://github.com/tsaleh/vim-matchit.git
   #  git://github.com/benmills/vimux.git
   #  git://github.com/pangloss/vim-javascript.git
   #  git://github.com/scrooloose/snipmate-snippets.git
