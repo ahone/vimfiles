@@ -58,3 +58,6 @@
 [submodule "bundle/L9"]
 	path = bundle/L9
 	url = git://github.com/vim-scripts/L9.git
+[submodule "bundle/ruby-debugger"]
+	path = bundle/ruby-debugger
+	url = git://github.com/astashov/vim-ruby-debugger.git
